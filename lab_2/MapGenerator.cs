@@ -8,7 +8,7 @@ namespace Kse.Algorithms.Samples
     {
         private const string Wall = "█";
 
-        private const string Space = " ";
+        private const string Space = "·";
 
         private readonly MapGeneratorOptions options;
 
@@ -52,7 +52,12 @@ namespace Kse.Algorithms.Samples
             {
                 AddTraffic(options.TrafficSeed);
             }
-
+            
+            var y1 = random.Next(0, 34);
+            maze[0, y1] = "A";
+            var y2 = random.Next(0, 34);
+            maze[89, y2] = "B";
+            
             return maze;
 
             void ExpandFrom(Point point, List<Point> visited)
@@ -74,7 +79,7 @@ namespace Kse.Algorithms.Samples
 
             void RemoveWallBetween(Point a, Point b)
             {
-                maze[(a.Column + b.Column) / 2, (a.Row + b.Row) / 2] = " ";
+                maze[(a.Column + b.Column) / 2, (a.Row + b.Row) / 2] = "·";
             }
 
             void Shuffle(Random rng, Point[] array)
