@@ -34,7 +34,16 @@ namespace Kse.Algorithms.Samples
                 return null;
             }
         }
-
+        public (Point, Point) GetPoints(string[,] maze)
+        {    var pointA = new Point(0, 0);
+            var pointB = new Point(0, 0);
+            for (var y = 0; y < maze.GetLength(1); y++)    {
+                if (maze[0, y] == "A")         { 
+                    pointA = new Point(0, y);        }
+                else if (maze[9, y] == "B")        {
+                    pointB = new Point(89, y);        }
+            }
+            return (pointA, pointB);}
         private string[,] GenerateMaze()
         {
             for (var x = 0; x < maze.GetLength(0); x++)
@@ -53,17 +62,17 @@ namespace Kse.Algorithms.Samples
                 AddTraffic(options.TrafficSeed);
             }
             
-            var y1 = random.Next(0, 34);
+            var y1 = random.Next(0, 9);
             maze[0, y1] = "A";
-            var y2 = random.Next(0, 34);
-            maze[89, y2] = "B";
+            var y2 = random.Next(0, 9);
+            maze[9, y2] = "B";
             
             return maze;
 
             void ExpandFrom(Point point, List<Point> visited)
             {
                 visited.Add(point);
-                var neighbours = GetNeighbours(point.Column, point.Row, maze).ToArray();
+                var neighbours = GetNeighbours(point.Column, point.Row, maze, 2).ToArray();
                 Shuffle(random, neighbours);
                 foreach (var neighbour in neighbours)
                 {
@@ -164,7 +173,7 @@ namespace Kse.Algorithms.Samples
             }
         }
 
-        private List<Point> GetNeighbours(int column, int row, string[,] maze, int offset = 2,
+        public List<Point> GetNeighbours(int column, int row, string[,] maze, int offset ,
             bool checkWalls = false)
         {
             var result = new List<Point>();
@@ -180,6 +189,10 @@ namespace Kse.Algorithms.Samples
                 var newRow = row + offsetY;
                 if (newColumn >= 0 && newRow >= 0 && newColumn < maze.GetLength(0) && newRow < maze.GetLength(1))
                 {
+                    if (maze[newColumn, newRow] == "█")
+                    {
+                        checkWalls = true;
+                    }
                     if (!checkWalls || maze[newColumn, newRow] == Space)
                     {
                         result.Add(new Point(newColumn, newRow));
