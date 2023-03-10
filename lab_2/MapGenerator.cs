@@ -8,7 +8,7 @@ namespace Kse.Algorithms.Samples
     {
         private const string Wall = "█";
 
-        private const string Space = "·";
+        private const string Space = " ";
 
         private readonly MapGeneratorOptions options;
 
@@ -35,15 +35,22 @@ namespace Kse.Algorithms.Samples
             }
         }
         public (Point, Point) GetPoints(string[,] maze)
-        {    var pointA = new Point(0, 0);
+        {    
+            var pointA = new Point(0, 0);
             var pointB = new Point(0, 0);
-            for (var y = 0; y < maze.GetLength(1); y++)    {
-                if (maze[0, y] == "A")         { 
-                    pointA = new Point(0, y);        }
-                else if (maze[9, y] == "B")        {
-                    pointB = new Point(89, y);        }
+            for (var y = 0; y < maze.GetLength(1); y++)    
+            {
+                if (maze[0, y] == "A")         
+                { 
+                    pointA = new Point(0, y);        
+                }
+                else if (maze[9, y] == "B")        
+                {
+                    pointB = new Point(9, y);        
+                }
             }
             return (pointA, pointB);}
+        
         private string[,] GenerateMaze()
         {
             for (var x = 0; x < maze.GetLength(0); x++)
@@ -88,7 +95,7 @@ namespace Kse.Algorithms.Samples
 
             void RemoveWallBetween(Point a, Point b)
             {
-                maze[(a.Column + b.Column) / 2, (a.Row + b.Row) / 2] = "·";
+                maze[(a.Column + b.Column) / 2, (a.Row + b.Row) / 2] = Space;
             }
 
             void Shuffle(Random rng, Point[] array)
@@ -110,7 +117,7 @@ namespace Kse.Algorithms.Samples
                 {
                     if (random.NextDouble() < chance && maze[x, y] == Wall)
                     {
-                        maze[x, y] = " ";
+                        maze[x, y] = Space;
                     }
                 }
             }
@@ -133,7 +140,7 @@ namespace Kse.Algorithms.Samples
                 {
                     for (var x = 0; x < maze.GetLength(0); x++)
                     {
-                        if (maze[x, y] == " ")
+                        if (maze[x, y] == Space)
                         {
                             return new Point(x, y);
                         }
@@ -189,11 +196,7 @@ namespace Kse.Algorithms.Samples
                 var newRow = row + offsetY;
                 if (newColumn >= 0 && newRow >= 0 && newColumn < maze.GetLength(0) && newRow < maze.GetLength(1))
                 {
-                    if (maze[newColumn, newRow] == "█")
-                    {
-                        checkWalls = true;
-                    }
-                    if (!checkWalls || maze[newColumn, newRow] == Space)
+                    if (!checkWalls || maze[newColumn, newRow] != Wall)
                     {
                         result.Add(new Point(newColumn, newRow));
                     }
