@@ -7,12 +7,9 @@ var generator = new MapGenerator(new MapGeneratorOptions()
 });
 
 string[,] map = generator.Generate();
-new MapPrinter().Print(map);
 var (start, goal) = generator.GetPoints(map);
-Console.WriteLine((goal.Column, goal.Row));
-Console.WriteLine("___________");
 var path = GetShortestPath(map, start, goal);
-new MapPrinter().Print(map);
+new MapPrinter().Print(map, path);
 
 List<Point> GetShortestPath(string[,] map, Point start, Point goal)
 {
@@ -22,7 +19,7 @@ List<Point> GetShortestPath(string[,] map, Point start, Point goal)
     distances[start] = 0;
     origins[start] = start;
     var point = start;
-    while (!(goal.Column == point.Column && goal.Row == point.Row))
+    while ((point.Column, point.Row) != (goal.Column, goal.Row))
     {
         foreach (var n in generator.GetNeighbours(point.Column, point.Row, map, 1, true))
         {
@@ -32,22 +29,22 @@ List<Point> GetShortestPath(string[,] map, Point start, Point goal)
                 distances[n] = 1 + distances[point];
             }
         }
-
         distances.Remove(point);
         point = distances.MinBy(pair => pair.Value).Key; 
     }
-
+    
     List<Point> path = new List<Point>();
     while ((point.Column, point.Row) != (start.Column, start.Row))
     {
+        if ((point.Column, point.Row) == (goal.Column, goal.Row)) // щоб не передавати точку goal у список шляху
+        {
+            point = origins[point]; 
+        }
         path.Add(point);
         point = origins[point];
     }
-
-    return path; // щоб червоним не підкреслювало поки не написана програма
-}
-
-foreach (var ppp in path)
-{
-    Console.WriteLine((ppp.Column, ppp.Row));
+    
+    Console.WriteLine($"\nPath lenth: {distances[goal]}\n");
+    
+    return path;
 }

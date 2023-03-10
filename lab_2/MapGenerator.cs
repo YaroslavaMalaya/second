@@ -38,17 +38,18 @@ namespace Kse.Algorithms.Samples
         {    
             var pointA = new Point(0, 0);
             var pointB = new Point(0, 0);
-            for (var y = 0; y < maze.GetLength(1); y++)    
-            {
-                if (maze[0, y] == "A")         
-                { 
-                    pointA = new Point(0, y);        
-                }
-                else if (maze[9, y] == "B")        
-                {
-                    pointB = new Point(9, y);        
-                }
-            }
+             for (var y = 0; y < maze.GetLength(1); y++)    
+             {
+                 if (maze[0, y] == "A")         
+                 { 
+                     pointA = new Point(0, y);        
+                 }
+                 if (maze[9, y] == "B")        
+                 {
+                     pointB = new Point(9, y);        
+                 }
+             }
+            
             return (pointA, pointB);}
         
         private string[,] GenerateMaze()

@@ -6,14 +6,24 @@ namespace Kse.Algorithms.Samples
 
     public class MapPrinter
     {
-        public void Print(string[,] maze)
+        public void Print(string[,] maze, List<Point> path)
         {
+            PrintThePath();
             PrintTopLine();
             for (var row = 0; row < maze.GetLength(1); row++)
             {
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.Write($"{row}\t");
                 for (var column = 0; column < maze.GetLength(0); column++)
                 {
+                    if (maze[column, row] == "·" || maze[column, row] == "A" || maze[column, row] == "B")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
                     Console.Write(maze[column, row]);
                 }
 
@@ -35,6 +45,13 @@ namespace Kse.Algorithms.Samples
                 }
     
                 Console.WriteLine("\n");
+            }
+            void PrintThePath()
+            {
+                foreach (var point in path)
+                {
+                    maze[point.Column, point.Row] = "·";
+                }
             }
         }
     }
