@@ -16,7 +16,8 @@ namespace Kse.Algorithms.Samples
                 Console.Write($"{row}\t");
                 for (var column = 0; column < maze.GetLength(0); column++)
                 {
-                    if (maze[column, row] == "·" || maze[column, row] == "A" || maze[column, row] == "B")
+                    if (path.Contains(new (column, row)) || maze[column, row] == "A" || maze[column, row] == "B" 
+                        || maze[column, row] == "·")
                     {
                         Console.ForegroundColor = ConsoleColor.Magenta;
                     }
@@ -45,12 +46,20 @@ namespace Kse.Algorithms.Samples
                 }
     
                 Console.WriteLine("\n");
-            }
+            } 
+            
             void PrintThePath()
             {
                 foreach (var point in path)
                 {
-                    maze[point.Column, point.Row] = "·";
+                    if (!int.TryParse(maze[point.Column, point.Row], out _))
+                    {
+                        maze[point.Column, point.Row] = "·";
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }

@@ -1,20 +1,26 @@
 ﻿using Kse.Algorithms.Samples;
 
+var check = true;
 var generator = new MapGenerator(new MapGeneratorOptions()
 {
-    Height = 10,
-    Width = 10,
+    Height = 35,
+    Width = 90,
+    Noise = .1f,
+    AddTraffic = check,
+    TrafficSeed = 1234
 });
 
 string[,] map = generator.Generate();
 var (start, goal) = generator.GetPoints(map);
-var path = GetShortestPath(map, start, goal);
+var path = GetShortestPath(map, start, goal, check);
 new MapPrinter().Print(map, path);
 
-List<Point> GetShortestPath(string[,] map, Point start, Point goal)
+List<Point> GetShortestPath(string[,] map, Point start, Point goal, bool check)
 {
     var distances = new Dictionary<Point, int>();
     var origins = new Dictionary<Point, Point>();
+    double time = 0;
+    double hours = 0;
 
     distances[start] = 0;
     origins[start] = start;
@@ -38,13 +44,31 @@ List<Point> GetShortestPath(string[,] map, Point start, Point goal)
     {
         if ((point.Column, point.Row) == (goal.Column, goal.Row)) // щоб не передавати точку goal у список шляху
         {
-            point = origins[point]; 
+            point = origins[point];
         }
         path.Add(point);
         point = origins[point];
+        if (check)
+        {
+            if ((point.Column, point.Row) != (start.Column, start.Row))
+            {
+                var number = map[point.Column, point.Row];
+                double v = 60 - (int.Parse(number) - 1) * 6;
+                time += (1 / v) * 60; // in minutes
+            }
+        }
     }
     
-    Console.WriteLine($"\nPath lenth: {distances[goal]}\n");
+    Console.WriteLine($"\nPath length: {distances[goal]} km");
+    if (check)
+    {
+        while (time > 60.0)
+        {
+            hours += Math.Round(time / 60, 0);
+            time -= 60;
+        }
+        Console.WriteLine($"Time: {hours} hours {Math.Round(time, 0)} minutes\n");
+    }
     
     return path;
 }
