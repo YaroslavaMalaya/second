@@ -1,36 +1,44 @@
-﻿using Kse.Algorithms.Samples;
+﻿using System.Diagnostics;
+using Kse.Algorithms.Samples;
 
+var check = true; // true - з заторами, false - без заторів
 var generator = new MapGenerator(new MapGeneratorOptions()
 {
     Height = 20,
     Width = 20,
     Noise = .1f,
-    AddTraffic = true,
+    AddTraffic = check,
     TrafficSeed = 1234
 });
 
 string[,] map = generator.Generate();
 var (start, goal) = generator.GetPoints(map);
-var pathDijkstra = GetShortestPathDijkstra(map, start, goal, true);
-var pathA = GetShortestPathA(map, start, goal, true);
+var pathDijkstra = GetShortestPathDijkstra(map, start, goal, check);
+var pathA = GetShortestPathA(map, start, goal);
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("Dijkstra:");
+Console.ForegroundColor = ConsoleColor.White;
 new MapPrinter().Print(map, pathDijkstra);
 Console.WriteLine("------------------------------");
+Console.ForegroundColor = ConsoleColor.Magenta;
+Console.WriteLine("A*:");
+Console.ForegroundColor = ConsoleColor.White;
 new MapPrinter().Print(map, pathA);
 
-
-
-List<Point> GetShortestPathA(string[,] map, Point start, Point goal, bool check)
+List<Point> GetShortestPathA(string[,] map, Point start, Point goal)
 {
+    var stopwatch = new Stopwatch();
+    stopwatch.Start();
     double Heuristic(Point point)
     {
         return Math.Sqrt(Math.Pow(goal.Column - point.Column, 2) + Math.Pow(goal.Row - point.Row, 2));
     }
     var open = new PriorityQueue<Point, double>();
     var origins = new Dictionary<Point, Point>();
-    
-    open.Enqueue(start, 0);
+    var steps = 0;
     var distances = new Dictionary<Point, double>();
     var distancesHeuristic = new Dictionary<Point, double>();
+    open.Enqueue(start, 0);
     distances[start] = 0;
     distancesHeuristic[start] = Heuristic(start);
 
@@ -48,6 +56,9 @@ List<Point> GetShortestPathA(string[,] map, Point start, Point goal, bool check)
                 point = origins[point];
             }
             path.Reverse();
+            stopwatch.Stop();
+            Console.WriteLine($"Steps in A*: {steps}");
+            Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms \n");
             return path;
         }
         
@@ -62,20 +73,25 @@ List<Point> GetShortestPathA(string[,] map, Point start, Point goal, bool check)
                 origins[neighbor] = current;
             }
         }
+        steps++;
     }
     return null;
 }
 
 List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool check)
 {
+    var stopwatch = new Stopwatch();
+    stopwatch.Start();
     var distances = new Dictionary<Point, int>();
     var origins = new Dictionary<Point, Point>();
+    var point = start;
     double time = 0;
     double hours = 0;
-
+    var steps = 0;
+    
     distances[start] = 0;
     origins[start] = start;
-    var point = start;
+
     while ((point.Column, point.Row) != (goal.Column, goal.Row))
     {
         foreach (var n in generator.GetNeighbours(point.Column, point.Row, map, 1, true))
@@ -87,7 +103,8 @@ List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool
             }
         }
         distances.Remove(point);
-        point = distances.MinBy(pair => pair.Value).Key; 
+        point = distances.MinBy(pair => pair.Value).Key;
+        steps++;
     }
     
     List<Point> path = new List<Point>();
@@ -118,8 +135,10 @@ List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool
             hours += Math.Round(time / 60, 0);
             time -= 60;
         }
-        Console.WriteLine($"Time: {hours} hours {Math.Round(time, 0)} minutes\n");
+        Console.WriteLine($"Time: {hours} hours {Math.Round(time, 0)} minutes");
     }
-    
+    stopwatch.Stop();
+    Console.WriteLine($"\nSteps in Dijkstra: {steps}");
+    Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms \n");
     return path;
 }
