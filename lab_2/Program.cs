@@ -4,26 +4,32 @@ using Kse.Algorithms.Samples;
 var check = true; // true - з заторами, false - без заторів
 var generator = new MapGenerator(new MapGeneratorOptions()
 {
-    Height = 20,
-    Width = 20,
+    Height = 35,
+    Width = 90,
     Noise = .1f,
     AddTraffic = check,
     TrafficSeed = 1234
 });
 
-string[,] map = generator.Generate();
-var (start, goal) = generator.GetPoints(map);
-var pathDijkstra = GetShortestPathDijkstra(map, start, goal, check);
-var pathA = GetShortestPathA(map, start, goal);
-Console.ForegroundColor = ConsoleColor.Magenta;
-Console.WriteLine("Dijkstra:");
-Console.ForegroundColor = ConsoleColor.White;
-new MapPrinter().Print(map, pathDijkstra);
-Console.WriteLine("------------------------------");
-Console.ForegroundColor = ConsoleColor.Magenta;
-Console.WriteLine("A*:");
-Console.ForegroundColor = ConsoleColor.White;
-new MapPrinter().Print(map, pathA);
+var count = 0;
+while (count < 5)
+{
+    Console.ForegroundColor = ConsoleColor.White;
+    string[,] map = generator.Generate();
+    var (start, goal) = generator.GetPoints(map);
+    var pathDijkstra = GetShortestPathDijkstra(map, start, goal, check);
+    var pathA = GetShortestPathA(map, start, goal);
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("Dijkstra:");
+    Console.ForegroundColor = ConsoleColor.White;
+    new MapPrinter().Print(map, pathDijkstra);
+    Console.WriteLine("------------------------------");
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    Console.WriteLine("A*:");
+    Console.ForegroundColor = ConsoleColor.White;
+    new MapPrinter().Print(map, pathA);
+    count++;
+}
 
 List<Point> GetShortestPathA(string[,] map, Point start, Point goal)
 {
@@ -58,7 +64,9 @@ List<Point> GetShortestPathA(string[,] map, Point start, Point goal)
             path.Reverse();
             stopwatch.Stop();
             Console.WriteLine($"Steps in A*: {steps}");
-            Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms \n");
+            Console.WriteLine($"Time: {stopwatch.Elapsed}");
+            //Console.WriteLine($"Ticks: {stopwatch.ElapsedTicks}");
+            Console.WriteLine($"Milliseconds: {stopwatch.ElapsedMilliseconds} \n");
             return path;
         }
         
@@ -106,7 +114,7 @@ List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool
         point = distances.MinBy(pair => pair.Value).Key;
         steps++;
     }
-    
+
     List<Point> path = new List<Point>();
     while ((point.Column, point.Row) != (start.Column, start.Row))
     {
@@ -139,6 +147,8 @@ List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool
     }
     stopwatch.Stop();
     Console.WriteLine($"\nSteps in Dijkstra: {steps}");
-    Console.WriteLine($"Time: {stopwatch.ElapsedMilliseconds} ms \n");
+    Console.WriteLine($"Time: {stopwatch.Elapsed}");
+    //Console.WriteLine($"Ticks: {stopwatch.ElapsedTicks}");
+    Console.WriteLine($"Milliseconds: {stopwatch.ElapsedMilliseconds} \n");
     return path;
 }
