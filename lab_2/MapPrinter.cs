@@ -17,7 +17,7 @@ namespace Kse.Algorithms.Samples
                 for (var column = 0; column < maze.GetLength(0); column++)
                 {
                     if (path.Contains(new (column, row)) || maze[column, row] == "A" || maze[column, row] == "B" 
-                        || maze[column, row] == "·")
+                        || maze[column, row] == "🧚")
                     {
                         Console.ForegroundColor = ConsoleColor.Magenta;
                     }
@@ -54,7 +54,7 @@ namespace Kse.Algorithms.Samples
                 {
                     if (!int.TryParse(maze[point.Column, point.Row], out _))
                     {
-                        maze[point.Column, point.Row] = "·";
+                        maze[point.Column, point.Row] = "🧚";
                     }
                     else
                     {

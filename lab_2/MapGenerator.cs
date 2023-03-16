@@ -44,9 +44,9 @@ namespace Kse.Algorithms.Samples
                  { 
                      pointA = new Point(0, y);        
                  }
-                 if (maze[19, y] == "B")        
+                 if (maze[89, y] == "B")        
                  {
-                     pointB = new Point(19, y);        
+                     pointB = new Point(89, y);        
                  }
              }
             
@@ -70,11 +70,10 @@ namespace Kse.Algorithms.Samples
                 AddTraffic(options.TrafficSeed);
             }
             
-            var y1 = random.Next(0, 19);
+            var y1 = random.Next(0, 34);
             maze[0, y1] = "A";
-            var y2 = random.Next(0, 19);
-            maze[19, y2] = "B";
-            
+            var y2 = random.Next(0, 34);
+            maze[89, y2] = "B";
             return maze;
 
             void ExpandFrom(Point point, List<Point> visited)

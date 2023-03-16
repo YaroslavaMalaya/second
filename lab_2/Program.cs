@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Kse.Algorithms.Samples;
 
-var check = true; // true - з заторами, false - без заторів
+var check = false; // true - з заторами, false - без заторів
 var generator = new MapGenerator(new MapGeneratorOptions()
 {
     Height = 35,
@@ -12,7 +12,7 @@ var generator = new MapGenerator(new MapGeneratorOptions()
 });
 
 var count = 0;
-while (count < 5)
+while (count < 4)
 {
     Console.ForegroundColor = ConsoleColor.White;
     string[,] map = generator.Generate();
@@ -132,7 +132,8 @@ List<Point> GetShortestPathDijkstra(string[,] map, Point start, Point goal, bool
                 double v = 60 - (int.Parse(number) - 1) * 6;
                 time += (1 / v) * 60; // in minutes
             }
-        }
+        } 
+        steps++;
     }
     
     Console.WriteLine($"\nPath length: {distances[goal]} km");

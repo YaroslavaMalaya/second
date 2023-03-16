@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/Yarrochka/Мої файли/Study/IT 3/second/lab_2/lab_2.csproj": {}
+    "/Users/Yarrochka/Мої файли/Study/IT 3/ssecond/lab_2/lab_2.csproj": {}
   },
   "projects": {
-    "/Users/Yarrochka/Мої файли/Study/IT 3/second/lab_2/lab_2.csproj": {
+    "/Users/Yarrochka/Мої файли/Study/IT 3/ssecond/lab_2/lab_2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/Yarrochka/Мої файли/Study/IT 3/second/lab_2/lab_2.csproj",
+        "projectUniqueName": "/Users/Yarrochka/Мої файли/Study/IT 3/ssecond/lab_2/lab_2.csproj",
         "projectName": "lab_2",
-        "projectPath": "/Users/Yarrochka/Мої файли/Study/IT 3/second/lab_2/lab_2.csproj",
+        "projectPath": "/Users/Yarrochka/Мої файли/Study/IT 3/ssecond/lab_2/lab_2.csproj",
         "packagesPath": "/Users/Yarrochka/.nuget/packages/",
-        "outputPath": "/Users/Yarrochka/Мої файли/Study/IT 3/second/lab_2/obj/",
+        "outputPath": "/Users/Yarrochka/Мої файли/Study/IT 3/ssecond/lab_2/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/Yarrochka/.nuget/NuGet/NuGet.Config"
