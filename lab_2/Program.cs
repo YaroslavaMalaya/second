@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Kse.Algorithms.Samples;
 
-var check = false; // true - з заторами, false - без заторів
+var check = true; // true - з заторами, false - без заторів
 var generator = new MapGenerator(new MapGeneratorOptions()
 {
     Height = 35,
